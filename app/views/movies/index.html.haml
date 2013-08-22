@@ -11,7 +11,7 @@
       - checked = @params[:ratings].keys.include?(rating)
     - else
       - checked = true
-    = check_box_tag "ratings[#{rating}]", '1', checked, :id => 'rating_' + rating
+    = check_box_tag "ratings[#{rating}]", '1', checked, :id => 'ratings_' + rating
   = submit_tag 'Refresh', :id => 'ratings_submit'
 
 %table#movies
