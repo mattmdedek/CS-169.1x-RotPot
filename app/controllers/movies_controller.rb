@@ -7,13 +7,31 @@ class MoviesController < ApplicationController
   end
 
   def index
-#@movies = Movie.order(params[:sort_by])
     @all_ratings = Movie.all_ratings
+    do_redirect = false
+    if not params[:ratings] and session[:ratings]
+      do_redirect = true
+      params[:ratings] = session[:ratings]
+    end
+    if not params[:sort_by] and session[:sort_by]
+      do_redirect = true
+      params[:sort_by] = session[:sort_by]
+    end
+
+    if do_redirect
+      flash.keep
+      redirect_to movies_path + "?" + params.to_query
+    end
+    
     if params[:ratings]
       rating_filter = params[:ratings].select {|k,v| v == '1'}.keys
     else
       rating_filter = @all_ratings
     end
+
+    session[:ratings] = params[:ratings]
+    session[:sort_by] = params[:sort_by]
+
     @movies = Movie.where(rating: rating_filter).order(params[:sort_by])
     @params = params
   end
